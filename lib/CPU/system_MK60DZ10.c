@@ -54,6 +54,7 @@ uint32_t SystemCoreClock = DEFAULT_SYSTEM_CLOCK;
  *         
  */
 void SystemInit (void) {
+  //定义UART结构体
   UART_InitTypeDef term_port_structure;
   //使能全部IO时钟
   SIM->SCGC5 |= (SIM_SCGC5_PORTA_MASK
@@ -92,15 +93,28 @@ void SystemInit (void) {
   term_port_structure.UART_Uartx = TERM_PORT;
   term_port_structure.UART_BaudRate = TERMINAL_BAUD;
   LPLD_UART_Init(term_port_structure);
-  
+
+  /*
+*****************************************************************************  
   //打印系统调试信息
-#ifdef DEBUG_PRINT     
+#ifdef DEBUG_PRINT   
   printf("\r\n");   
   printf("*********** 基于拉普兰德K60底层库 http://www.lpld.cn ***********\r\n");
   printf("OSKinetis固件库版本:%s\tmail:support@lpld.cn\r\n", OSKinetis_Version);
   printf("系统内核时钟:%dMHz\t总线时钟:%dMHz\r\n", g_core_clock/1000000u, g_bus_clock/1000000u);
   printf("FlexBus时钟:%dMHz\tFlash时钟:%dMHz\r\n", g_flexbus_clock/1000000u, g_flash_clock/1000000u);
   printf("系统启动完毕，若要禁用调试输出请定义PRINT_ON_OFF为1(k60_card.h)\r\n");
+  printf("********************************************************************\r\n");
+#endif
+****************************************************************************/
+    //打印系统调试信息
+#ifdef DEBUG_PRINT  
+  printf("\r\n");   
+  printf("*********** DEBUG INFORMATION http://www.h4ck0ne.com ***********\r\n");
+  printf("OSKinetis Version:%s\tmail:support@lpld.cn\r\n", OSKinetis_Version);
+  printf("core_clock:%dMHz\t Bus_clock:%dMHz\r\n", g_core_clock/1000000u, g_bus_clock/1000000u);
+  printf("FlexBus_clock:%dMHz\t Flash_clock:%dMHz\r\n", g_flexbus_clock/1000000u, g_flash_clock/1000000u);
+  printf("System start OK!!!if you want disable DEBUG OUTPUT, please define PRINT_ON_OFF is 1(k60_card.h)\r\n");
   printf("********************************************************************\r\n");
 #endif
   
@@ -119,6 +133,10 @@ void SystemCoreClockUpdate (void) {
   uint32_t temp;
   temp =  CPU_XTAL_CLK_HZ *((uint32_t)(MCG->C6 & MCG_C6_VDIV_MASK) + 24u );
   temp = (uint32_t)(temp/((uint32_t)(MCG->C5 & MCG_C5_PRDIV_MASK) +1u ));
+#if defined(CPU_MK60FX15_ADD)
+  temp = (CPU_XTAL_CLK_HZ) *((uint32_t)(MCG->C6 & 0x1f) + 16u );
+  temp = (uint32_t)(temp/((uint32_t)(MCG->C5 & 0x07) +1u ))/2;
+#endif
   SystemCoreClock = temp;
 }
 

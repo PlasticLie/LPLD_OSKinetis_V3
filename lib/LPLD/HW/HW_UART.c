@@ -189,7 +189,7 @@ void LPLD_UART_Init(UART_InitTypeDef uart_init_structure)
   
   uartx->C4 = temp |  UART_C4_BRFA(brfa);    
   
-  //配置发送接收中断
+  //配置接收中断
   if(uart_init_structure.UART_RxIntEnable == TRUE && rx_isr != NULL)
   {
     uartx->C2 |= UART_C2_RIE_MASK; 
@@ -199,6 +199,7 @@ void LPLD_UART_Init(UART_InitTypeDef uart_init_structure)
   {
     uartx->C2 &= ~(UART_C2_RIE_MASK); 
   }
+  //配置发送中断
   if(uart_init_structure.UART_TxIntEnable == TRUE && tx_isr != NULL)
   {
     uartx->C2 |= UART_C2_TIE_MASK; 

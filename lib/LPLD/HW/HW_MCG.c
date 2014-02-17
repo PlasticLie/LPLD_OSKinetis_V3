@@ -60,6 +60,8 @@ uint8 LPLD_PLL_Setup(PllOptionEnum_Type core_clk_mhz)
   core_clk_mhz = (PllOptionEnum_Type)(core_clk_mhz>200u?200u:core_clk_mhz);
   
   // 根据期望主频选择分频和倍频系数
+  //对K60FX和K60DN进行区分设置
+// (CPU_MK60DZ10)
   switch(core_clk_mhz)
   {
   case PLL_48:
@@ -97,6 +99,37 @@ uint8 LPLD_PLL_Setup(PllOptionEnum_Type core_clk_mhz)
   default:
     return LPLD_PLL_Setup(PLL_96);
   }
+#if defined(CPU_MK60FX15_ADD)
+   switch(core_clk_mhz)
+  {
+  case PLL_50:
+    prdiv = 7u;
+    vdiv = 1u;
+    break;
+  case PLL_100:
+    prdiv = 7u;
+    vdiv = 16u;
+    break;
+  case PLL_120:
+    prdiv = 4u;
+    vdiv = 8u;
+    break;
+  case PLL_150:
+    prdiv = 4u;
+    vdiv = 14u;
+    break;
+  case PLL_180:
+    prdiv = 4u;
+    vdiv = 20u;
+    break;
+  case PLL_200:
+    prdiv = 4u;
+    vdiv = 24u;
+    break;
+  default:
+    return LPLD_PLL_Setup(PLL_120);
+  }
+#endif
   
   pll_freq = core_clk_mhz * 1;
   core_div = 0;
@@ -153,6 +186,7 @@ uint8 LPLD_PLL_Setup(PllOptionEnum_Type core_clk_mhz)
   
   //设置系统时钟分频系数
   LPLD_Set_SYS_DIV(core_div, bus_div, flexbus_div, flash_div);  
+ // LPLD_Set_SYS_DIV(0, 1, 4, 4);  
   
   //设置倍频系数
   MCG->C6 = MCG_C6_PLLS_MASK | MCG_C6_VDIV(vdiv); 
