@@ -20,3 +20,4 @@ http://www.lpld.cn/?p=97
     修改后的库要使用的话，只要在k60_card里面添加：
     #define CPU_MK60FX15_ADD
     就可以了
+

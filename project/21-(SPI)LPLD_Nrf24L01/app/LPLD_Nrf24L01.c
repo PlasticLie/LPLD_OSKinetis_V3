@@ -56,6 +56,8 @@ void portb_handle(void);
 
 void main (void)
 {
+  //brief 修改初始化函数地址
+  LPLD_Nrf24L01_Init(); 
 #if NRF24L01_WORKMODE == NRF24L01_TX_WORKMODE 
   int i; 
   gpio_init_struct.GPIO_PTx = PTB;        //PORTB
@@ -78,7 +80,6 @@ void main (void)
   LPLD_GPIO_EnableIrq(gpio_init_struct); //内部下拉,使能PORTC1作为NRF24L01的IRQ中断
   LPLD_Nrf24L01_RxModeInit();
 #endif
-  LPLD_Nrf24L01_Init(); 
   while(1)
   {
 #if NRF24L01_WORKMODE == NRF24L01_TX_WORKMODE

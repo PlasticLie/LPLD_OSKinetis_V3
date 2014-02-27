@@ -82,20 +82,22 @@ uint8 LPLD_SPI_Init(SPI_InitTypeDef spi_init_structure)
     SIM->SCGC6 |= SIM_SCGC6_DSPI0_MASK;  
 
     //选择PCS0
-    if(pcs0_pin == PTA14)
+    switch(pcs0_pin)
     {
-      PORTA->PCR[14] = 0 | PORT_PCR_MUX(2) | PORT_PCR_DSE_MASK;
+        case PTA14:
+            PORTA->PCR[14] = 0 | PORT_PCR_MUX(2) | PORT_PCR_DSE_MASK;
+        case PTC4:
+            PORTA->PCR[4] = 0 | PORT_PCR_MUX(2) | PORT_PCR_DSE_MASK;
+        default:
+            return 0;
     }
-    else//pcs0_pin == PTC4
-    {
-      PORTC->PCR[4] = 0 | PORT_PCR_MUX(2) | PORT_PCR_DSE_MASK;
     }
     //选择PCS1
     if(pcs1_pin == PTC3)
     {
       PORTC->PCR[3]  = 0 | PORT_PCR_MUX(2) | PORT_PCR_DSE_MASK;
     }
-    else //pcs1_pin == PTD4
+    else if (pcs1_pin == PTD4)//pcs1_pin == PTD4
     {
       PORTD->PCR[4] = 0 | PORT_PCR_MUX(2) | PORT_PCR_DSE_MASK;
     }
@@ -104,7 +106,7 @@ uint8 LPLD_SPI_Init(SPI_InitTypeDef spi_init_structure)
     {
       PORTC->PCR[2]  = 0 | PORT_PCR_MUX(2) | PORT_PCR_DSE_MASK;
     }
-    else //pcs2_pin == PTD5
+    else if (pcs2_pin == PTD5)//pcs2_pin == PTD5
     {
       PORTD->PCR[5]  = 0 | PORT_PCR_MUX(2) | PORT_PCR_DSE_MASK;
     }
@@ -113,7 +115,7 @@ uint8 LPLD_SPI_Init(SPI_InitTypeDef spi_init_structure)
     {
       PORTC->PCR[1]  = 0 | PORT_PCR_MUX(2) | PORT_PCR_DSE_MASK;
     }
-    else //pcs3_pin == PTD6
+    else if (pcs3_pin == PTD6)//pcs3_pin == PTD6
     {
       PORTD->PCR[6]  = 0 | PORT_PCR_MUX(2) | PORT_PCR_DSE_MASK;
     }
@@ -122,8 +124,7 @@ uint8 LPLD_SPI_Init(SPI_InitTypeDef spi_init_structure)
     {
       PORTC->PCR[0]  = 0 | PORT_PCR_MUX(2) | PORT_PCR_DSE_MASK;
     }
-    else
-      return 0;
+
     //选择PCS5
     if(pcs5_pin == PTB23)
     {
@@ -135,7 +136,7 @@ uint8 LPLD_SPI_Init(SPI_InitTypeDef spi_init_structure)
     {
       PORTA->PCR[15] = 0 | PORT_PCR_MUX(2) | PORT_PCR_DSE_MASK;//SCK
     }
-    else //sck_pin == PTC5
+    else if (sck_pin == PTA15)//sck_pin == PTC5
     {
       PORTC->PCR[5] = 0 | PORT_PCR_MUX(2) | PORT_PCR_DSE_MASK;//SCK
     }
@@ -144,7 +145,7 @@ uint8 LPLD_SPI_Init(SPI_InitTypeDef spi_init_structure)
     {
       PORTA->PCR[16] = 0 | PORT_PCR_MUX(2) | PORT_PCR_DSE_MASK;//SOUT
     }
-    else //mosi_pin == PTC6
+    else if (mosi_pin == PTC6)//mosi_pin == PTC6
     {
       PORTC->PCR[6] = 0 | PORT_PCR_MUX(2) | PORT_PCR_DSE_MASK;//SOUT
     }
@@ -153,7 +154,7 @@ uint8 LPLD_SPI_Init(SPI_InitTypeDef spi_init_structure)
     {
       PORTA->PCR[17] = 0 | PORT_PCR_MUX(2); //SIN
     }
-    else //miso_pin == PTC7
+    else if (miso_pin == PTC7)//miso_pin == PTC7
     {
       PORTC->PCR[7] = 0 | PORT_PCR_MUX(2); //SIN
     } 
@@ -167,7 +168,7 @@ uint8 LPLD_SPI_Init(SPI_InitTypeDef spi_init_structure)
     {
       PORTB->PCR[10] = 0 | PORT_PCR_MUX(2) | PORT_PCR_DSE_MASK;
     }
-    else//pcs0_pin == PTE4
+    else if (pcs0_pin == PTE4)//pcs0_pin == PTE4
     {
       PORTE->PCR[4] = 0 | PORT_PCR_MUX(2) | PORT_PCR_DSE_MASK;
     }
@@ -176,7 +177,7 @@ uint8 LPLD_SPI_Init(SPI_InitTypeDef spi_init_structure)
     {
       PORTB->PCR[9]  = 0 | PORT_PCR_MUX(2) | PORT_PCR_DSE_MASK;
     }
-    else //pcs1_pin == PTE0
+    else if (pcs1_pin == PTE)//pcs1_pin == PTE0
     {
       PORTE->PCR[0] = 0 | PORT_PCR_MUX(2) | PORT_PCR_DSE_MASK;
     }
@@ -197,7 +198,7 @@ uint8 LPLD_SPI_Init(SPI_InitTypeDef spi_init_structure)
     {
       PORTB->PCR[11] = 0 | PORT_PCR_MUX(2) | PORT_PCR_DSE_MASK;
     }
-    else //sck_pin == PTE2
+    else if (sck_pin == PTE2)//sck_pin == PTE2
     {
       PORTE->PCR[2] = 0 | PORT_PCR_MUX(2) | PORT_PCR_DSE_MASK;//SCK
     }
@@ -206,7 +207,7 @@ uint8 LPLD_SPI_Init(SPI_InitTypeDef spi_init_structure)
     {
       PORTB->PCR[16] = 0 | PORT_PCR_MUX(2) | PORT_PCR_DSE_MASK;//SOUT
     }
-    else //mosi_pin == PTE1
+    else if (mosi_pin == PTE1)//mosi_pin == PTE1
     {
       PORTE->PCR[1] = 0 | PORT_PCR_MUX(2) | PORT_PCR_DSE_MASK;//SOUT
     }
@@ -215,7 +216,7 @@ uint8 LPLD_SPI_Init(SPI_InitTypeDef spi_init_structure)
     {
       PORTB->PCR[17] = 0 | PORT_PCR_MUX(2); //SIN
     }
-    else //miso_pin == PTE3
+    else if (miso_pin == PTE3)//miso_pin == PTE3
     {
       PORTE->PCR[3] = 0 | PORT_PCR_MUX(2); //SIN
     } 
@@ -228,7 +229,7 @@ uint8 LPLD_SPI_Init(SPI_InitTypeDef spi_init_structure)
     {
       PORTD->PCR[11] = 0 | PORT_PCR_MUX(2) | PORT_PCR_DSE_MASK;
     }
-    else//pcs0_pin == PTB20
+    else if (pcs0_pin == PTB20)//pcs0_pin == PTB20
     {
       PORTB->PCR[20] = 0 | PORT_PCR_MUX(2) | PORT_PCR_DSE_MASK;
     }
@@ -243,7 +244,7 @@ uint8 LPLD_SPI_Init(SPI_InitTypeDef spi_init_structure)
     {
       PORTD->PCR[12] = 0 | PORT_PCR_MUX(2) | PORT_PCR_DSE_MASK;
     }
-    else //sck_pin == PTB21
+    else if (sck_pin == PTB21)//sck_pin == PTB21
     {
       PORTB->PCR[21] = 0 | PORT_PCR_MUX(2) | PORT_PCR_DSE_MASK;//SCK
     }
@@ -252,7 +253,7 @@ uint8 LPLD_SPI_Init(SPI_InitTypeDef spi_init_structure)
     {
       PORTD->PCR[13] = 0 | PORT_PCR_MUX(2) | PORT_PCR_DSE_MASK;//SOUT
     }
-    else //mosi_pin == PTB22
+    else if (mosi_pin == PTB22)//mosi_pin == PTB22
     {
       PORTB->PCR[22] = 0 | PORT_PCR_MUX(2) | PORT_PCR_DSE_MASK;//SOUT
     }
@@ -261,28 +262,32 @@ uint8 LPLD_SPI_Init(SPI_InitTypeDef spi_init_structure)
     {
       PORTD->PCR[14] = 0 | PORT_PCR_MUX(2); //SIN
     }
-    else //miso_pin == PTB23
+    else if (miso_pin == PTB23)//miso_pin == PTB23
     {
       PORTB->PCR[23] = 0 | PORT_PCR_MUX(2); //SIN
     } 
   }
-  else
-    return 0;
+
   //配置SPI MCR寄存器
   spix->MCR = 0 & (~SPI_MCR_MDIS_MASK)        
                 |SPI_MCR_HALT_MASK        
                 |SPI_MCR_PCSIS_MASK       
                 |SPI_MCR_CLR_TXF_MASK    
-                |SPI_MCR_CLR_RXF_MASK;  
-  //选择SPI 工作模式
-  if(spi_mode == SPI_MODE_SLAVE)
+                |SPI_MCR_CLR_RXF_MASK; 
+ 
+  //选择SPI工作模式
+  switch (spi_mode)
   {
-    spix->MCR &= ~SPI_MCR_MSTR_MASK;//从机模式  
+    case SPI_MODE_MASTER:
+        spix->MCR &= ~SPI_MCR_MSTR_MASK;
+        break;
+    case SPI_MODE_MASTER:
+        spix->MCR |= SPI_MCR_MSTR_MASK;
+        break;
+    default:
+        return 0;
   }
-  else
-  {
-    spix->MCR |= SPI_MCR_MSTR_MASK; //主机模式 
-  }
+
   //选择使能tx FIFO
   if(txFIFO_enable == TRUE)
   {
@@ -784,8 +789,3 @@ void SPI2_IRQHandler(void)
   OSIntExit();          
 #endif
 }
-
-
-
-
-
